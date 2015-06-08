@@ -1,3 +1,4 @@
+!#/usr/local/bin/php
 <?php
 /**
  * requestDataConverter.
@@ -7,10 +8,14 @@
  */
 
 use Library\Parameter;
+use Library\Response\Error;
+use Library\Response\Success;
+use Library\ResponseInterface;
 use Phalcon\CLI\Console;
 use Phalcon\CLI\Dispatcher;
 use Phalcon\DI\FactoryDefault\CLI;
 use Phalcon\Loader;
+use Phalcon\Script\Color;
 
 /**
  * 应用目录
@@ -22,6 +27,7 @@ $loader->registerNamespaces([
     'Tasks' => APP_PATH . '/Tasks',
     'Library' => APP_PATH . '/Library',
     'Logic' => APP_PATH . '/Logic',
+    'Phalcon' => APP_PATH . '/Phalcon',
 ])->register();
 
 $di = new CLI();
@@ -42,7 +48,20 @@ try {
 
     /** @var Parameter $parameter */
     $parameter = $di->get('parameter');
-    $return = $console->handle($parameter->getParameters());
+    $task = $console->handle($parameter->getParameters());
+
+    /** @var ResponseInterface $response */
+    $response = $task->dispatcher->getReturnedValue();
+    if ($response instanceof Success) {
+        echo Color::success($response->getContent());
+    } elseif ($response instanceof Error) {
+        echo Color::error($response->getContent());
+    } else {
+        echo Color::info($response->getContent());
+    }
+
+    exit($response->getCode());
 } catch (Exception $e) {
-    echo $e;
+    echo Color::error($e->getMessage());
+    exit($e->getCode());
 }

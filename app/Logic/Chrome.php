@@ -19,14 +19,12 @@ class Chrome implements RequestConverterInterface
 {
 
     /**
-     *
-     *
-     * @param $contents
-     * @return StdRequest
+     * {@inheritdoc}
      */
     public function getRequest($contents)
     {
-        // TODO: Implement getRequest() method.
+        $stdRequest = new StdRequest();
+        return $stdRequest;
     }
 
     /**

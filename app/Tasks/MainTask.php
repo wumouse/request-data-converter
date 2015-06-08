@@ -8,34 +8,42 @@
 
 namespace Tasks;
 
-use Logic\Chrome;
+use Library\Options;
+use Library\Response\Info;
+use Library\Response\Success;
 use Logic\RequestFactory;
-use Phalcon\CLI\Task;
 
 /**
  *
  *
  * @package Tasks
  */
-class MainTask extends Task
+class MainTask extends TaskBase
 {
 
     /**
      */
     public function mainAction()
     {
-        $from = $this->parameter->getOpt('f', 'chrome');
-        $to = $this->parameter->getOpt('t');
+        $options = $this->getOptions();
+        if (0 == $this->parameter->countOptions()) {
+            return $this->getInfoResponse($options);
+        }
+        $from = $this->parameter->getOption('f', 'chrome');
+        $to = $this->parameter->getOption('t');
         if (!$to) {
-            echo '-t option required!';
+            return $this->getErrorResponse('invalid' . $options->getDescription('t'));
         }
 
-        $fromContentFile = $this->parameter->getOpt('i');
+        $fromContentFile = $this->parameter->getOption('i');
         if (!$fromContentFile) {
-            echo '-i option required!';
+            return $this->getErrorResponse('invalid' . $options->getDescription('f'));
+        }
+        if (false !== strpos($fromContentFile, '~')) {
+            $fromContentFile = str_replace('~', $_SERVER['HOME'], $fromContentFile);
         }
         if (!stream_resolve_include_path($fromContentFile)) {
-            echo '-i must be a exists file include request content';
+            return $this->getErrorResponse('-i must be a exists file include request content');
         }
 
         $fromLogic = RequestFactory::get($from);
@@ -44,13 +52,28 @@ class MainTask extends Task
         $request = $fromLogic->getRequest(file_get_contents($fromContentFile));
         $toLogic->setRequest($request);
 
-        $output = $this->parameter->getOpt('o');
+        $output = $this->parameter->getOption('o');
         $content = $toLogic->getContent();
         if ($output) {
             file_put_contents($output, $content);
-            echo 'file wrote to ' . realpath($output);
+            return $this->getSuccessResponse('wrote to ' . realpath($output));
         } else {
-            echo $content;
+            return $this->getSuccessResponse($content);
         }
+    }
+
+    /**
+     * 获取帮助信息
+     *
+     * @return Options
+     */
+    protected function getOptions()
+    {
+        $options = parent::getOptions();
+        $options->add('f', 'file format from');
+        $options->add('t', 'file format to be');
+        $options->add('i', 'file name of request file from');
+
+        return $options;
     }
 }

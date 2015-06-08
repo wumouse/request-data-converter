@@ -52,9 +52,29 @@ class Parameter
      * @param mixed $default
      * @return mixed
      */
-    public function getOpt($name, $default = null)
+    public function getOption($name, $default = null)
     {
         return isset($this->options[$name]) ? $this->options[$name] : $default;
+    }
+
+    /**
+     * 获取选项
+     *
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
+    }
+
+    /**
+     * 计数
+     *
+     * @return int
+     */
+    public function countOptions()
+    {
+        return count($this->options);
     }
 
     /**
