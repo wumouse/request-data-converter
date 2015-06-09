@@ -51,7 +51,7 @@ class StdRequest
      *
      * @var string[][]
      */
-    protected $cookies;
+    protected $cookies = array();
 
     /**
      * POST 请求参数

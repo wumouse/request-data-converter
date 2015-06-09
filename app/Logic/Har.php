@@ -36,7 +36,8 @@ class Har implements RequestConverterInterface
 
         foreach ($currentRequest['cookies'] as $cookie) {
             $stdRequest->addCookie(
-                $cookie['name'], $cookie['value']
+                $cookie['name'],
+                $cookie['value']
             );
         }
 
@@ -44,7 +45,8 @@ class Har implements RequestConverterInterface
 
         $stdRequest->setUrlBase($urlPart['scheme'] . '://' . $urlPart['host'] .
             (!empty($urlPart['port']) && ':' . $urlPart['port']));
-        $stdRequest->setUrlPath($urlPart['path'] . '?' . $urlPart['query']);
+        $stdRequest->setUrlPath($urlPart['path'] .
+            (!empty($urlPart['query']) && '?' . $urlPart['query']));
         $stdRequest->setMethod($currentRequest['method']);
 
         return $stdRequest;
@@ -57,7 +59,7 @@ class Har implements RequestConverterInterface
      */
     public function setRequest(StdRequest $request)
     {
-        // TODO: Implement setRequest() method.
+        throw new Exception('developing');
     }
 
     /**
@@ -67,6 +69,6 @@ class Har implements RequestConverterInterface
      */
     public function getContent()
     {
-        // TODO: Implement getContent() method.
+        throw new Exception('developing');
     }
 }

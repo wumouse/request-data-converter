@@ -104,7 +104,7 @@ class PhpStorm implements RequestConverterInterface
 
         $urlPathOption = clone $option;
         $urlPathOption->setAttribute('name', 'urlPath');
-        $urlPathOption->setAttribute('value', $request->getUrlBase());
+        $urlPathOption->setAttribute('value', $request->getUrlPath());
         $restClientRequest->appendChild($urlPathOption);
 
         $restClientRequest->appendChild($option);
@@ -162,7 +162,7 @@ class PhpStorm implements RequestConverterInterface
     {
         $list = $dom->createElement('list');
         foreach ($request->getHeaders() as $key => $value) {
-            $keyValuePair = $dom->createElement('keyValuePair');
+            $keyValuePair = $dom->createElement('KeyValuePair');
             $optionKey = $dom->createElement('option');
             $optionValue = clone $optionKey;
             $optionKey->setAttribute('name', 'key');

@@ -28,6 +28,9 @@ class RequestFactory
     {
         $typeClass = Text::camelize($type);
         $typeFQN = '\Logic\\' . $typeClass;
+        if (!class_exists($typeFQN)) {
+            throw new Exception('unsupported format');
+        }
         return new $typeFQN;
     }
 }
