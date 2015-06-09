@@ -63,4 +63,18 @@ class TaskBase extends Task
     {
         return new Info($content);
     }
+
+    /**
+     *
+     *
+     * @param string $fromContentFile
+     * @return mixed
+     */
+    protected function convertPath($fromContentFile)
+    {
+        if (false !== strpos($fromContentFile, '~')) {
+            $fromContentFile = str_replace('~', $_SERVER['HOME'], $fromContentFile);
+        }
+        return $fromContentFile;
+    }
 }

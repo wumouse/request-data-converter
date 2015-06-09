@@ -1,4 +1,3 @@
-!#/usr/local/bin/php
 <?php
 /**
  * requestDataConverter.
@@ -16,6 +15,10 @@ use Phalcon\CLI\Dispatcher;
 use Phalcon\DI\FactoryDefault\CLI;
 use Phalcon\Loader;
 use Phalcon\Script\Color;
+
+if (!extension_loaded('phalcon')) {
+    exit('Phalcon required' . PHP_EOL);
+}
 
 /**
  * 应用目录
@@ -62,6 +65,6 @@ try {
 
     exit($response->getCode());
 } catch (Exception $e) {
-    echo Color::error($e->getMessage());
+    echo Color::error($e);
     exit($e->getCode());
 }

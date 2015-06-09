@@ -46,9 +46,26 @@ class StdRequest
      */
     protected $parameters;
 
+    /**
+     * Cookies
+     *
+     * @var string[][]
+     */
     protected $cookies;
 
+    /**
+     * POST 请求参数
+     *
+     * @var string[]
+     */
     protected $postFields;
+
+    /**
+     * 主体
+     *
+     * @var string
+     */
+    protected $body;
 
     /**
      * @return string
@@ -135,19 +152,58 @@ class StdRequest
      *
      * @param string $name
      * @param string $value
+     * @param string $expires
+     * @param string $domain
+     * @param string $path
      */
-    public function addCookie($name, $value)
+    public function addCookie($name, $value, $expires = '', $domain = '', $path = '')
     {
-        $this->cookies[$name] = $value;
+        $this->cookies[(string)$name] = array(
+            'name' => (string)$name,
+            'value' => (string)$value,
+            'expires' => (string)$expires,
+            'domain' => (string)$domain,
+            'path' => (string)$path,
+        );
     }
 
+    /**
+     * 添加 Post 内容
+     *
+     * @param string $name
+     * @param string $value
+     */
     public function addPostField($name, $value)
     {
-        $this->postFields[$name] = $value;
+        $this->postFields[(string)$name] = (string)$value;
     }
 
+    /**
+     * 设置请求主体
+     *
+     * @param string $body
+     */
+    public function setRequestBody($body)
+    {
+        $this->body = $body;
+    }
+
+    /**
+     * 添加请求头
+     *
+     * @param string $name
+     * @param string $value
+     */
     public function addHeader($name, $value)
     {
-        $this->headers[$name] = $value;
+        $this->headers[(string)$name] = (string)$value;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCookies()
+    {
+        return $this->cookies;
     }
 }

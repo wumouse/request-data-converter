@@ -32,16 +32,14 @@ class MainTask extends TaskBase
         $from = $this->parameter->getOption('f', 'chrome');
         $to = $this->parameter->getOption('t');
         if (!$to) {
-            return $this->getErrorResponse('invalid' . $options->getDescription('t'));
+            return $this->getErrorResponse('invalid ' . $options->getDescription('t'));
         }
 
         $fromContentFile = $this->parameter->getOption('i');
         if (!$fromContentFile) {
-            return $this->getErrorResponse('invalid' . $options->getDescription('f'));
+            return $this->getErrorResponse('invalid ' . $options->getDescription('i'));
         }
-        if (false !== strpos($fromContentFile, '~')) {
-            $fromContentFile = str_replace('~', $_SERVER['HOME'], $fromContentFile);
-        }
+        $fromContentFile = $this->convertPath($fromContentFile);
         if (!stream_resolve_include_path($fromContentFile)) {
             return $this->getErrorResponse('-i must be a exists file include request content');
         }
@@ -55,10 +53,11 @@ class MainTask extends TaskBase
         $output = $this->parameter->getOption('o');
         $content = $toLogic->getContent();
         if ($output) {
+            $output = $this->convertPath($output);
             file_put_contents($output, $content);
             return $this->getSuccessResponse('wrote to ' . realpath($output));
         } else {
-            return $this->getSuccessResponse($content);
+            return $this->getSuccessResponse(PHP_EOL . $content);
         }
     }
 

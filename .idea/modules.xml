@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../request-converter/.idea/request-converter.iml" filepath="$PROJECT_DIR$/../request-converter/.idea/request-converter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/request-data-converter.iml" filepath="$PROJECT_DIR$/.idea/request-data-converter.iml" />
     </modules>
   </component>
 </project>
